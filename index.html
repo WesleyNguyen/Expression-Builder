@@ -1,0 +1,132 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<style>
+#div1, #div2 {
+    float: left;
+    width: 100px;
+    height: 35px;
+    margin: 10px;
+    padding: 10px;
+    border: 1px solid black;
+}
+.dragContainer {
+	text-align: center;
+    cursor: pointer;
+    float: left;
+    clear: both;
+    display: grid;
+    grid-template-columns: 50% auto;
+    <!--margin-bottom: 15em;-->
+}
+.functionContainer {
+	display: grid;
+    grid-template-columns: auto auto auto auto;
+}
+.container {
+    display: grid;
+    grid-template-columns: 50% auto;
+}
+.col {
+    padding: .4em 1.3em;
+}
+.color-dark {
+    background: #2885C4;
+}
+.color-light {
+    background: #57B3F1;
+}
+
+input.txt {
+    border: 0;
+    padding: 1em;
+    width: 80%;
+    margin-bottom: 2em;
+}
+input.btn {
+    border: 0;
+    display:block;
+    padding:1em 3em;
+    background:#A5F883;
+    color:#003A61;
+    margin-bottom:1em;
+    cursor:pointer;
+}
+.life-container {
+    background:#3FA0E1;
+    padding:.5em;
+    font-weight:bold;
+    cursor:pointer;
+}
+.spacer {
+	display:block;
+}
+
+</style>
+<script>
+function allowDrop(ev) {
+    ev.preventDefault();
+}
+
+function drag(ev) {
+    ev.dataTransfer.setData("text", ev.target.id);
+    //console.log(ev.getId.id);
+}
+
+function drop(ev) {
+    ev.preventDefault();
+    var data = ev.dataTransfer.getData("text");
+    ev.target.appendChild(document.getElementById(data));
+    
+    console.log(document.getElementById(data).id);
+    
+    if(document.getElementById(data).id == "add"){
+    	console.log("Entered if statement!");
+        var newDiv = document.createElement("div");
+		var newText = document.createTextNode("");
+        
+        var newDiv2 = document.createElement("div");
+        
+        newDiv.id = "div1";
+        newDiv2.id = "div1";
+        newDiv.class = "dragContainer";
+        newDiv2.class = "dragContainer";
+        
+		newDiv.appendChild(newText);
+        newDiv2.appendChild(newText);
+        
+		newDiv.addEventListener('drop', drop);
+		newDiv.addEventListener('dragover', allowDrop);
+        newDiv2.addEventListener('drop', drop);
+		newDiv2.addEventListener('dragover', allowDrop);
+        
+        document.getElementsByClassName("dragContainer")[0].appendChild(newDiv);
+        //document.body.appendChild(newDiv2);
+    }    
+}
+</script>
+</head>
+<body>
+
+<h2>Drag and Drop</h2>
+<p>Drag the image back and forth between the two div elements.</p>
+
+
+	<div class="dragContainer" id="div1" ondrop="drop(event)" ondragover="allowDrop(event)">
+    </div>
+
+	<div id="div2" ondrop="drop(event)" ondragover="allowDrop(event)">
+    </div>
+
+<div class="container">
+    <p draggable="true" ondragstart="drag(event)" id="add"><span>add</span></p>
+    <p draggable="true" ondragstart="drag(event)" id="add"><span>subtract</span></p>
+    <p draggable="true" ondragstart="drag(event)" id="add"><span>multiply</span></p>
+    <p draggable="true" ondragstart="drag(event)" id="add"><span>divide</span></p>   
+</div>
+
+
+    
+</body>
+</html>
+<!--<img src="img_w3slogo.gif" draggable="true" ondragstart="drag(event)" id="drag1" width="88" height="31">-->
