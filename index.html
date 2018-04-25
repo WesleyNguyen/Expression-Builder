@@ -9,6 +9,13 @@
     margin: 10px;
     padding: 10px;
     border: 1px solid black;
+    background-color: #80ffaa;
+}
+.background {
+	background-color: #ffff99;
+}
+#slate {
+	background-color: #ffff99;
 }
 .dragContainer {
 	text-align: center;
@@ -17,11 +24,11 @@
     clear: both;
     display: grid;
     grid-template-columns: 50% auto;
-    <!--margin-bottom: 15em;-->
 }
 .functionContainer {
 	display: grid;
-    grid-template-columns: auto auto auto auto;
+    grid-template-columns: auto auto auto auto auto auto;
+    background-color: #e6ccff;
 }
 .container {
     display: grid;
@@ -58,8 +65,18 @@ input.btn {
     font-weight:bold;
     cursor:pointer;
 }
-.spacer {
+.spaceFill {
 	display:block;
+    background: #e6ccff;
+}
+.singleParam {
+
+}
+.doubleParam {
+
+}
+.tripleParam {
+
 }
 
 </style>
@@ -68,24 +85,83 @@ function allowDrop(ev) {
     ev.preventDefault();
 }
 
+function noAllowDrop(ev) {
+	ev.stopPropagation();
+}
+
+function clearBox(elementId) {
+	document.getElementById(elementId).innerHTML = "";
+    
+	var newDiv = document.createElement("div");
+    var newText = document.createTextNode("");
+	newDiv.id = "div1";
+	newDiv.class = "dragContainer";
+    newDiv.appendChild(newText);
+    newDiv.addEventListener('drop', drop);
+    newDiv.addEventListener('dragover', allowDrop);
+    document.getElementById('slate').appendChild(newDiv);
+}
+
+function addEmpty() {
+	var newDiv = document.createElement("div");
+    var newText = document.createTextNode("");
+	newDiv.id = "div1";
+	newDiv.class = "dragContainer";
+    newDiv.appendChild(newText);
+    newDiv.addEventListener('drop', drop);
+    newDiv.addEventListener('dragover', allowDrop);
+    document.getElementById('slate').appendChild(newDiv);
+}
+
 function drag(ev) {
     ev.dataTransfer.setData("text", ev.target.id);
-    //console.log(ev.getId.id);
+
+    //var cln = ev.target.cloneNode(true);
+    //cln.dataTransfer.setData("text", cln.target.id);
 }
 
 function drop(ev) {
     ev.preventDefault();
     var data = ev.dataTransfer.getData("text");
-    ev.target.appendChild(document.getElementById(data));
+    var cln = document.getElementById(data).cloneNode(true);
     
-    console.log(document.getElementById(data).id);
+//    ev.target.appendChild(document.getElementById(data));
+    ev.target.appendChild(cln);
     
-    if(document.getElementById(data).id == "add"){
+    //ev.target.addEventListener('noAllowDrop', ev);
+    //this.addEventListener('ondragover', noAllowDrop);
+    //ev.target.addEventListener('ondragover', noAllowDrop);
+    
+    console.log(document.getElementsByClassName(data).class);
+    
+    //if(document.getElementById(data).id == "add"){
+//	if(document.getElementById(data).id == "doubleParam"){
+    if(document.getElementById(data).className == 'singleParam'){
     	console.log("Entered if statement!");
-        var newDiv = document.createElement("div");
+        console.log(document.getElementById(data).className);
+        
+        var newDiv = document.createElement("div");        
 		var newText = document.createTextNode("");
         
+        newDiv.id = "div1";
+        newDiv.class = "dragContainer";
+        
+		newDiv.appendChild(newText);
+        
+		newDiv.addEventListener('drop', drop);
+		newDiv.addEventListener('dragover', allowDrop);
+        
+        //document.getElementsByClassName("dragContainer")[0].appendChild(newDiv);
+        document.getElementById('slate').appendChild(newDiv);
+    }    
+    
+    else if(document.getElementById(data).className == 'doubleParam'){
+    	console.log("Entered if statement!");
+        console.log(document.getElementById(data).className);
+        
+        var newDiv = document.createElement("div");        
         var newDiv2 = document.createElement("div");
+		var newText = document.createTextNode("");
         
         newDiv.id = "div1";
         newDiv2.id = "div1";
@@ -100,33 +176,77 @@ function drop(ev) {
         newDiv2.addEventListener('drop', drop);
 		newDiv2.addEventListener('dragover', allowDrop);
         
-        document.getElementsByClassName("dragContainer")[0].appendChild(newDiv);
-        //document.body.appendChild(newDiv2);
-    }    
+        //document.getElementsByClassName("dragContainer")[0].appendChild(newDiv);
+        document.getElementById('slate').appendChild(newDiv);
+        document.getElementById('slate').appendChild(newDiv2);
+    }
+        else if(document.getElementById(data).className == 'tripleParam'){
+    	console.log("Entered if statement!");
+        console.log(document.getElementById(data).className);
+        
+        var newDiv = document.createElement("div");        
+        var newDiv2 = document.createElement("div");
+		var newDiv3 = document.createElement("div");
+		var newText = document.createTextNode("");
+        
+        newDiv.id = "div1";
+        newDiv2.id = "div1";
+		newDiv3.id = "div1";
+        newDiv.class = "dragContainer";
+        newDiv2.class = "dragContainer";
+        newDiv3.class = "dragContainer";
+        
+		newDiv.appendChild(newText);
+        newDiv2.appendChild(newText);
+        newDiv3.appendChild(newText);
+        
+		newDiv.addEventListener('drop', drop);
+		newDiv.addEventListener('dragover', allowDrop);
+        newDiv2.addEventListener('drop', drop);
+		newDiv2.addEventListener('dragover', allowDrop);
+        newDiv3.addEventListener('drop', drop);
+		newDiv3.addEventListener('dragover', allowDrop);
+        
+        //document.getElementsByClassName("dragContainer")[0].appendChild(newDiv);
+		document.getElementById('slate').appendChild(newDiv);
+        document.getElementById('slate').appendChild(newDiv2);
+		document.getElementById('slate').appendChild(newDiv3);
+    }
 }
 </script>
 </head>
-<body>
+<body class="background">
+<!--<div>-->
+<h2 style="text-align: center">Expression Builder</h2>
+<p style="text-align: center">Drag the javascript functions into the box to create an expression.</p>
+<button type="button" onclick="clearBox('slate')">Clear Board</button>
+<button type="button" onclick="addEmpty()">Add Empty Box</button>
 
-<h2>Drag and Drop</h2>
-<p>Drag the image back and forth between the two div elements. I'm about to go insane. Basically trying to see if anything even works.</p>
-
-
-	<div class="dragContainer" id="div1" ondrop="drop(event)" ondragover="allowDrop(event)">
-    </div>
-
-	<div id="div2" ondrop="drop(event)" ondragover="allowDrop(event)">
-    </div>
-
-<div class="container">
-    <p draggable="true" ondragstart="drag(event)" id="add"><span>add</span></p>
-    <p draggable="true" ondragstart="drag(event)" id="add"><span>subtract</span></p>
-    <p draggable="true" ondragstart="drag(event)" id="add"><span>multiply</span></p>
-    <p draggable="true" ondragstart="drag(event)" id="add"><span>divide</span></p>   
+<div class="functionContainer">
+    <p draggable="true" ondragstart="drag(event)" id="add" class="doubleParam"><span>add(x,y)</span></p>
+    
+    <p draggable="true" ondragstart="drag(event)" id="subtract" class="doubleParam"><span>subtract(x,y)</span></p>
+    <p draggable="true" ondragstart="drag(event)" id="multiply" class="doubleParam"><span>multiply(x,y)</span></p>
+    <p draggable="true" ondragstart="drag(event)" id="divide" class="doubleParam"><span>divide(x,y)</span></p>
+    
+    <p draggable="true" ondragstart="drag(event)" id="foo" class="tripleParam"><span>foo(x,y,z)</span></p>
+    
+    <p draggable="true" ondragstart="drag(event)" id="doSomethingComplicated" class="singleParam"><span>it'sComplicated(x)</span></p>
+    
 </div>
 
+<div class="spaceFill">
+	_____________________________________________________________________________________________________________________________________________________________
+</div>
+<div id="slate">
+	<div class="dragContainer" id="div1" ondrop="drop(event)" ondragover="allowDrop(event)">
+    </div>
+</div>
+	<!--<div id="div2" ondrop="drop(event)" ondragover="allowDrop(event)"></div>-->
 
-    
+
+
+<!--</div>-->
 </body>
 </html>
 <!--<img src="img_w3slogo.gif" draggable="true" ondragstart="drag(event)" id="drag1" width="88" height="31">-->
